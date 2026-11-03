@@ -5,9 +5,16 @@ Keep this concise and specific to your implementation.
 ## 1. Initial analysis
 
 - How are locations and connections represented in the baseline?
+Locations and connections are represented as read-only lists in WorldData.cs
+
 - Which operations appear frequent?
+For loops that look through data in WorldData.cs are core to both methods supplied in WorldQueries.cs.
+
 - Which operation(s) do you predict may scale poorly?
+Both methods in WorldQueries.cs scale linearly and are O(n) in the worst-case scenario. While both get quite expensive as the data sample grows large, the method FindOutgoingConnections catches my eye as /especially/ inefficient. I surmise that there are not-so-difficult ways to pre-initialize the data to make it considerably cheaper. 
+
 - What will you investigate first?
+I will investigate FindOutgoingConnections first and sketch out how I can make it more efficient.
 
 ## 2. Data representation
 
