@@ -18,7 +18,11 @@ I will investigate FindOutgoingConnections first and sketch out how I can make i
 
 ## 2. Data representation
 
-Describe important changes/retained choices, operations affected, and time/memory trade-offs.
+- Changes made in WorldData.cs
+Introduced two dictionaries: _locationsById, which maps location IDs to their corresponding Location objects, and _outgoingConnections, which maps location IDs to lists of outgoing connections. Both dictionaries are populated once in the constructor, allowing other systems to reuse the prepared data. The original arrays were retained to keep that efficient sequential access.
+
+- Changes made in WorldQueries.cs
+Replaced the original sequential searches with dictionary lookups through WorldData. This improves location lookup from O(V) to O(1) average time and outgoing connections from O(E) to O(1) average time, with O(k) required to iterate through the returned connections. The trade-off is additional memory usage and an initial preparation cost, in exchange for faster repeated queries.
 
 ## 3. Algorithms and adaptation
 
