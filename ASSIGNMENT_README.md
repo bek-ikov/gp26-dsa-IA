@@ -75,8 +75,9 @@ From the repository root:
 dotnet restore Standalone/FrontierDispatch.sln
 dotnet build Standalone/FrontierDispatch.sln
 dotnet test Standalone/FrontierDispatch.sln
-dotnet run --project Standalone/src/FrontierDispatch.App -- --baseline
+dotnet run --project Standalone/src/FrontierDispatch.App
 ```
+-- --baseline
 
 The untouched starter is intended to have:
 

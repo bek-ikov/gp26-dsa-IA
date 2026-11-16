@@ -15,8 +15,7 @@ namespace FrontierDispatch.Core
     /// </summary>
     public sealed class MinPriorityQueue<T>
     {
-        // The list stores the physical representation of the binary heap.
-        // Your implementation is responsible for preserving the min-heap invariant.
+
         private readonly List<Entry> _heap = new List<Entry>();
 
         /// <summary>
@@ -30,32 +29,94 @@ namespace FrontierDispatch.Core
         /// </summary>
         public void Enqueue(T item, int priority)
         {
-            // TODO: insert the new entry and restore the min-heap invariant.
-            throw new NotImplementedException();
+            _heap.Add(new Entry(item, priority));
+
+            SiftUp(_heap.Count - 1);
         }
 
         /// <summary>
         /// Returns the minimum-priority item without removing it.
         /// </summary>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown when the queue is empty.
-        /// </exception>
         public T Peek()
         {
-            // TODO: return the current minimum without changing the queue.
-            throw new NotImplementedException();
+            if (_heap.Count == 0)
+            {
+                throw new InvalidOperationException("The priority queue is empty.");
+            }
+
+            return _heap[0].Item;
         }
 
         /// <summary>
         /// Removes and returns the minimum-priority item.
         /// </summary>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown when the queue is empty.
-        /// </exception>
         public T Dequeue()
         {
-            // TODO: remove the minimum item and restore the min-heap invariant.
-            throw new NotImplementedException();
+            if (_heap.Count == 0)
+            {
+                throw new InvalidOperationException("The priority queue is empty.");
+            }
+
+            T result = _heap[0].Item;
+
+            int lastIndex = _heap.Count - 1;
+
+            _heap[0] = _heap[lastIndex];
+            _heap.RemoveAt(lastIndex);
+
+            if (_heap.Count > 0)
+            {
+                SiftDown(0);
+            }
+
+            return result;
+        }
+
+        private void SiftUp(int index)
+        {
+            while (index > 0)
+            {
+                int parentIndex = ParentIndex(index);
+
+                if (_heap[parentIndex].Priority <= _heap[index].Priority)
+                {
+                    break;
+                }
+
+                Swap(index, parentIndex);
+                index = parentIndex;
+            }
+        }
+
+        private void SiftDown(int index)
+        {
+            while (true)
+            {
+                int smallest = index;
+
+                int left = LeftChildIndex(index);
+                int right = RightChildIndex(index);
+
+                if (left < _heap.Count &&
+                    _heap[left].Priority < _heap[smallest].Priority)
+                {
+                    smallest = left;
+                }
+
+                if (right < _heap.Count &&
+                    _heap[right].Priority < _heap[smallest].Priority)
+                {
+                    smallest = right;
+                }
+
+                if (smallest == index)
+                {
+                    break;
+                }
+
+                Swap(index, smallest);
+                index = smallest;
+            }
         }
 
         /// <summary>
@@ -71,6 +132,28 @@ namespace FrontierDispatch.Core
 
             public T Item { get; }
             public int Priority { get; }
+        }
+
+        private static int ParentIndex(int index)
+        {
+            return (index - 1) / 2;
+        }
+
+        private static int LeftChildIndex(int index)
+        {
+            return 2 * index + 1;
+        }
+
+        private static int RightChildIndex(int index)
+        {
+            return 2 * index + 2;
+        }
+
+        private void Swap(int a, int b)
+        {
+            Entry temp = _heap[a];
+            _heap[a] = _heap[b];
+            _heap[b] = temp;
         }
     }
 }

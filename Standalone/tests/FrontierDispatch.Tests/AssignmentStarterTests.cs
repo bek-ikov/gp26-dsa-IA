@@ -1,6 +1,7 @@
-using System;
-using NUnit.Framework;
 using FrontierDispatch.Core;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace FrontierDispatch.Tests
 {
@@ -16,14 +17,61 @@ namespace FrontierDispatch.Tests
         // These tests document later assignment contracts without making the
         // untouched baseline red. Remove Ignore when you reach the named phase.
 
-        [Test, Ignore("Phase 3: enable when implementing the binary min-heap priority queue.")]
+        [Test] // Phase 3
         public void PriorityQueue_EnqueueAndDequeue_ReturnsLowestPriorityFirst()
         {
             var queue = new MinPriorityQueue<string>();
+
             queue.Enqueue("expensive", 9);
             queue.Enqueue("cheap", 2);
             queue.Enqueue("medium", 5);
             Assert.That(queue.Dequeue(), Is.EqualTo("cheap"));
+        }
+
+        [Test] // Phase 3
+        public void PriorityQueue_MultipleDequeues_MaintainsPriorityOrder()
+        {
+            var queue = new MinPriorityQueue<string>();
+
+            queue.Enqueue("highest", 10);
+            queue.Enqueue("lowest", 1);
+            queue.Enqueue("middle", 5);
+            queue.Enqueue("second", 3);
+            queue.Enqueue("fourth", 7);
+            Assert.That(queue.Dequeue(), Is.EqualTo("lowest"));
+            Assert.That(queue.Dequeue(), Is.EqualTo("second"));
+            Assert.That(queue.Dequeue(), Is.EqualTo("middle"));
+            Assert.That(queue.Dequeue(), Is.EqualTo("fourth"));
+            Assert.That(queue.Dequeue(), Is.EqualTo("highest"));
+
+            Assert.That(queue.Count, Is.EqualTo(0));
+        }
+
+        public void PriorityQueue_DuplicatePriorities_ReturnsAllItems()
+        {
+            var queue = new MinPriorityQueue<string>();
+
+            queue.Enqueue("first", 5);
+            queue.Enqueue("second", 2);
+            queue.Enqueue("third", 5);
+            queue.Enqueue("fourth", 2);
+
+            var results = new List<string>
+            {
+                queue.Dequeue(),
+                queue.Dequeue(),
+                queue.Dequeue(),
+                queue.Dequeue()
+            };
+
+            Assert.That(results, Does.Contain("first"));
+            Assert.That(results, Does.Contain("second"));
+            Assert.That(results, Does.Contain("third"));
+            Assert.That(results, Does.Contain("fourth"));
+            Assert.That(results[0], Is.AnyOf("second", "fourth"));
+            Assert.That(results[1], Is.AnyOf("second", "fourth"));
+            Assert.That(results[2], Is.AnyOf("first", "third"));
+            Assert.That(results[3], Is.AnyOf("first", "third"));
         }
 
         [Test, Ignore("Phase 4: enable when implementing Dijkstra route finding.")]

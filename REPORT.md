@@ -40,6 +40,13 @@ Explain your route finder at a useful high level and how the travel-budget query
 
 ## 5. Correctness and testing
 
+Added 2 tests during Phase 3
+- Test 1: Dequeue maintains priority order after repeated removals
+This tests SiftDown() more thoroughly. It makes sure the heap reorganises itself correctly after each removal, not just the first one.
+
+- Test 2: Duplicate priorities are handled correctly
+Verifies that equal priorities don't cause items to be lost or incorrectly ordered relative to items with different priorities.
+
 Important tests/edge cases and what they demonstrate.
 
 ## 6. Performance investigation
@@ -52,6 +59,7 @@ Describe one bug, wrong assumption, failed approach, or surprising result and ho
 
 ## 8. Tools and AI assistance
 
+Asked AI to suggest test ideas for Phase 3.
 Briefly describe relevant assistance, if any.
 
 ## 9. VG extension
