@@ -47,6 +47,7 @@ namespace FrontierDispatch.Tests
             Assert.That(queue.Count, Is.EqualTo(0));
         }
 
+        [Test] // Phase 3
         public void PriorityQueue_DuplicatePriorities_ReturnsAllItems()
         {
             var queue = new MinPriorityQueue<string>();
@@ -74,7 +75,7 @@ namespace FrontierDispatch.Tests
             Assert.That(results[3], Is.AnyOf("first", "third"));
         }
 
-        [Test, Ignore("Phase 4: enable when implementing Dijkstra route finding.")]
+        [Test] // Phase 4
         public void Dijkstra_StartEqualsGoal_ReturnsZeroCostRoute()
         {
             var finder = new DijkstraRouteFinder(WorldDatasetFactory.CreateSmall());

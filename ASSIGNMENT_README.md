@@ -75,7 +75,7 @@ From the repository root:
 dotnet restore Standalone/FrontierDispatch.sln
 dotnet build Standalone/FrontierDispatch.sln
 dotnet test Standalone/FrontierDispatch.sln
-dotnet run --project Standalone/src/FrontierDispatch.App
+dotnet run --project Standalone/src/FrontierDispatch.App -- --baseline
 ```
 -- --baseline
 

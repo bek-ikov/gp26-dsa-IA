@@ -60,6 +60,7 @@ Describe one bug, wrong assumption, failed approach, or surprising result and ho
 ## 8. Tools and AI assistance
 
 Asked AI to suggest test ideas for Phase 3.
+Asked AI to guide me through the Dijsktra implementation, without giving the code outright. AI provided pseuodecode for certain parts.
 Briefly describe relevant assistance, if any.
 
 ## 9. VG extension
