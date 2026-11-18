@@ -85,13 +85,51 @@ namespace FrontierDispatch.Tests
             Assert.That(result.LocationIds, Is.EqualTo(new[] { 0 }));
         }
 
-        [Test, Ignore("Phase 5: enable when implementing bounded reachability.")]
+        [Test] // Phase 4
+        public void Dijkstra_FindsLeastCostRoute_ReturnsCorrectPathAndCost()
+        {
+            var finder = new DijkstraRouteFinder(SampleWorldFactory.CreateSmall());
+            RouteResult result = finder.FindRoute(205, 734);
+            Assert.That(result.Found, Is.True);
+            Assert.That(result.TotalCost, Is.EqualTo(10));
+            Assert.That(result.LocationIds, Is.EqualTo(new[] { 205, 310, 512, 734 }));
+        }
+
+        [Test] // Phase 4
+        public void Dijkstra_UnreachableGoal_ReturnsNoRoute()
+        {
+            var finder = new DijkstraRouteFinder(SampleWorldFactory.CreateSmall());
+            RouteResult result = finder.FindRoute(101, 999);
+            Assert.That(result.Found, Is.False);
+            Assert.That(result.TotalCost, Is.EqualTo(0));
+            Assert.That(result.LocationIds, Is.Empty);
+        }
+
+        // TODO: Optimize phase 4 tests. Currently, a separate world gets created for each test. Opportunity for optimization: Simply make them all use the same world. Too lazy rn.
+
+        [Test] // Phase 5
         public void Reachability_ZeroBudget_IncludesStartAtZeroCost()
         {
             var query = new ReachabilityQuery(WorldDatasetFactory.CreateSmall());
             var result = query.FindReachable(0, 0);
             Assert.That(result.ContainsKey(0), Is.True);
             Assert.That(result[0], Is.EqualTo(0));
+        }
+
+        [Test] // Phase 5
+        public void Reachability_TravelBudget_ReturnsOnlyAffordableLocations()
+        {
+            var query = new ReachabilityQuery(SampleWorldFactory.CreateSmall());
+            var result = query.FindReachable(205, 7);
+            Assert.That(result.Count, Is.EqualTo(5));
+            Assert.That(result[205], Is.EqualTo(0));
+            Assert.That(result[101], Is.EqualTo(4));
+            Assert.That(result[310], Is.EqualTo(3));
+            Assert.That(result[901], Is.EqualTo(5));
+            Assert.That(result[512], Is.EqualTo(7));
+            Assert.That(result.ContainsKey(734), Is.False);
+            Assert.That(result.ContainsKey(950), Is.False);
+            Assert.That(result.ContainsKey(999), Is.False);
         }
     }
 }

@@ -38,8 +38,63 @@ namespace FrontierDispatch.Core
         /// </summary>
         public IReadOnlyDictionary<int, int> FindReachable(int startLocationId, int maxTravelCost)
         {
-            // TODO: adapt shortest-path reasoning to the travel-cost budget.
-            throw new NotImplementedException();
+            if (!_world.TryGetLocationById(startLocationId, out _))
+            {
+                throw new ArgumentException("Start location does not exist.");
+            }
+
+            if (maxTravelCost < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(maxTravelCost));
+            }
+
+            var frontier = new MinPriorityQueue<int>();
+            var distances = new Dictionary<int, int>();
+            var visited = new HashSet<int>();
+
+            distances[startLocationId] = 0;
+            frontier.Enqueue(startLocationId, 0);
+
+            while (frontier.Count > 0)
+            {
+                int currentLocationId = frontier.Dequeue();
+
+                if (visited.Contains(currentLocationId))
+                {
+                    continue;
+                }
+
+                int currentCost = distances[currentLocationId];
+
+                if (currentCost > maxTravelCost)
+                {
+                    break;
+                }
+
+                visited.Add(currentLocationId);
+
+                foreach (Connection connection in _world.GetOutgoingConnections(currentLocationId))
+                {
+                    int neighbourId = connection.ToLocationId;
+
+                    if (visited.Contains(neighbourId))
+                    {
+                        continue;
+                    }
+
+                    int newCost = currentCost + connection.TravelCost;
+
+                    if (newCost <= maxTravelCost &&
+                        (!distances.ContainsKey(neighbourId) ||
+                         newCost < distances[neighbourId]))
+                    {
+                        distances[neighbourId] = newCost;
+                        frontier.Enqueue(neighbourId, newCost);
+                    }
+                }
+            }
+
+            return distances;
         }
     }
 }
