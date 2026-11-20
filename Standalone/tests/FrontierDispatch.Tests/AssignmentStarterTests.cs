@@ -105,8 +105,6 @@ namespace FrontierDispatch.Tests
             Assert.That(result.LocationIds, Is.Empty);
         }
 
-        // TODO: Optimize phase 4 tests. Currently, a separate world gets created for each test. Opportunity for optimization: Simply make them all use the same world. Too lazy rn.
-
         [Test] // Phase 5
         public void Reachability_ZeroBudget_IncludesStartAtZeroCost()
         {

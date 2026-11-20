@@ -10,7 +10,7 @@ namespace FrontierDispatch.Core
 
         private readonly Dictionary<int, Location> _locationsById;
         private readonly Dictionary<int, List<Connection>> _outgoingConnections;
-        public WorldData(IEnumerable<Location> locations, IEnumerable<Connection> connections) // Keeping both the arrays and dictionaries for now, might be useful later
+        public WorldData(IEnumerable<Location> locations, IEnumerable<Connection> connections)
         {
             if (locations == null) throw new ArgumentNullException(nameof(locations));
             if (connections == null) throw new ArgumentNullException(nameof(connections));
